@@ -12,7 +12,7 @@ cascPath = sys.argv[1]
 print(cv2.getBuildInformation())
 
 faceCascade = cv2.CascadeClassifier(cascPath)
-eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
+eye_cascade = cv2.CascadeClassifier('haar/haarcascade_eye.xml')
 
 video_capture = cv2.VideoCapture(1)
 video_capture.set(cv2.CAP_PROP_BUFFERSIZE, 3);

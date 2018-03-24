@@ -2,7 +2,7 @@ import sys
 import math
 import numpy as np
 import scipy.ndimage.filters as filters
-from skimage.feature import peak_local_max
+from track_ic.ellipse_fitting import *
 
 from pandas import *
 sys.path.append('/usr/local/lib/python3.6/site-packages')
@@ -10,17 +10,17 @@ sys.path.append('/usr/local/lib/python3.6/site-packages')
 import cv2
 
 # Load an color image in grayscale
-img = cv2.imread('sam_eye_2.jpg')
+img = cv2.imread('david_eye_2.jpg')
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 
 iris_radius = 25.0
 
-iris_min = iris_radius - iris_radius * 0.1
-iris_max = iris_radius + iris_radius * 0.1
-iris_min = iris_min * iris_min
-iris_max = iris_max * iris_max
+rad_min = iris_radius - iris_radius * 0.1
+rad_max = iris_radius + iris_radius * 0.1
+iris_min = rad_min * rad_min
+iris_max = rad_max * rad_max
 
 # Should be a bit larger than 2x the iris radius max, and preferably odd.
 kernel_size = 55
@@ -61,7 +61,7 @@ filtered_img = lam * cv2.filter2D(gray, cv2.CV_64F, crcc)
 co = filtered_img + weighted_img
 
 # adjust this value down for darker images
-threshold = 500
+threshold = 2000
 
 data_max = filters.maximum_filter(co, 11)
 data_min = filters.minimum_filter(co, 11)
@@ -96,6 +96,13 @@ for coords in max_coords:
 
 row = max_psr_coords[0]
 col = max_psr_coords[1]
+
+iris_ellipse = fit_ellipse((row, col), gray, rad_max, rad_min)
+
+
+
+
+
 cv2.rectangle(img,(col, row),(col + 2,row + 2),(0,255,0),2)
 #cv2.rectangle(img,(abs_coords[0][1], abs_coords[0][0]), (abs_coords[0][1] + 2, abs_coords[0][0] + 2), (255,255,0), 2)
 print(max_psr)

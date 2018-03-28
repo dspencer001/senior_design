@@ -2,10 +2,13 @@ import sys
 import math
 import numpy as np
 import scipy.ndimage.filters as filters
+from scipy.signal import medfilt
+
+sys.path.append('/usr/local/lib/python3.6/site-packages')
+
 from track_ic.ellipse_fitting import *
 
 from pandas import *
-sys.path.append('/usr/local/lib/python3.6/site-packages')
 
 import cv2
 
@@ -15,7 +18,7 @@ img = cv2.imread('david_eye_2.jpg')
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 
-iris_radius = 25.0
+iris_radius = 28.0
 
 rad_min = iris_radius - iris_radius * 0.1
 rad_max = iris_radius + iris_radius * 0.1
@@ -97,10 +100,17 @@ for coords in max_coords:
 row = max_psr_coords[0]
 col = max_psr_coords[1]
 
-iris_ellipse = fit_ellipse((row, col), gray, rad_max, rad_min)
+center, width, height, phi = fit_ellipse((row, col), gray, rad_max, rad_min)
 
+# for pt in candidate_points:
+#     cv2.rectangle(img, (pt[1],pt[0]), (pt[1] + 1, pt[0] + 1), (0,255,0), 1)
 
+#cv2.ellipse(img, (center[1], center[0]), (width / 2, height / 2), phi, (0, 360), 255, 2)
+pixel_center = np.round(center).astype(int)
+width = round(width).astype(int)
+height = round(height).astype(int)
 
+cv2.ellipse(img,(pixel_center[0], pixel_center[1]),(width, height),phi,0,360,(0,255,0),1)
 
 
 cv2.rectangle(img,(col, row),(col + 2,row + 2),(0,255,0),2)

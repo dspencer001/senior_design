@@ -13,11 +13,9 @@ from pandas import *
 import cv2
 
 # Load an color image in grayscale
-#img = cv2.imread('david_eye_2.jpg')
-capture = cv2.VideoCapture(2)
+img = cv2.imread('david_eye_2.jpg')
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
 
 iris_radius = 28.0
 
@@ -51,8 +49,6 @@ for m in range(-1 * bounds, bounds + 1):
                     theta = math.atan(m/n)
 
                 oca[m + bounds][n + bounds] = complex(math.cos(theta) * c, math.sin(theta) * c)
-
-print(oca)
 
 
 beta = 2

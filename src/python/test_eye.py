@@ -7,6 +7,7 @@ from scipy.signal import medfilt
 sys.path.append('/usr/local/lib/python3.6/site-packages')
 
 from track_ic.ellipse_fitting import *
+from track_ic.corner_detection import *
 
 from pandas import *
 
@@ -14,6 +15,7 @@ import cv2
 
 # Load an color image in grayscale
 img = cv2.imread('david_eye_2.jpg')
+#capture = cv2.VideoCapture(2)
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -96,27 +98,33 @@ for coords in max_coords:
 row = max_psr_coords[0]
 col = max_psr_coords[1]
 
-center, width, height, phi = fit_ellipse((row, col), gray, rad_max, rad_min)
-#candidate_points = fit_ellipse((row, col), gray, rad_max, rad_min)
-#for pt in candidate_points:
-#    cv2.rectangle(img, (pt[1],pt[0]), (pt[1] + 1, pt[0] + 1), (0,255,0), 1)
+print(row)
+print(col)
 
+c_image = corner_detect(gray, img, row, col)
 
-#cv2.ellipse(img, (center[1], center[0]), (width / 2, height / 2), phi, (0, 360), 255, 2)
-pixel_center = np.round(center).astype(int)
-width = round(width).astype(int)
-height = round(height).astype(int)
+#center, width, height, phi = fit_ellipse((row, col), gray, rad_max, rad_min)
+##candidate_points = fit_ellipse((row, col), gray, rad_max, rad_min)
+##for pt in candidate_points:
+##    cv2.rectangle(img, (pt[1],pt[0]), (pt[1] + 1, pt[0] + 1), (0,255,0), 1)
+#
+#
+##cv2.ellipse(img, (center[1], center[0]), (width / 2, height / 2), phi, (0, 360), 255, 2)
+#pixel_center = np.round(center).astype(int)
+#width = round(width).astype(int)
+#height = round(height).astype(int)
+#
+#cv2.ellipse(img,(pixel_center[0], pixel_center[1]),(width, height),phi,0,360,(0,255,0),1)
+#
+#
+#cv2.rectangle(img,(col, row),(col + 2,row + 2),(0,255,0),2)
+#cv2.rectangle(img,(pixel_center[0], pixel_center[1]),(pixel_center[0] + 2,pixel_center[1] + 2),(0,0,255),2)
+#
+##cv2.rectangle(img,(abs_coords[0][1], abs_coords[0][0]), (abs_coords[0][1] + 2, abs_coords[0][0] + 2), (255,255,0), 2)
+#print(max_psr)
 
-cv2.ellipse(img,(pixel_center[0], pixel_center[1]),(width, height),phi,0,360,(0,255,0),1)
-
-
-cv2.rectangle(img,(col, row),(col + 2,row + 2),(0,255,0),2)
-cv2.rectangle(img,(pixel_center[0], pixel_center[1]),(pixel_center[0] + 2,pixel_center[1] + 2),(0,0,255),2)
-
-#cv2.rectangle(img,(abs_coords[0][1], abs_coords[0][0]), (abs_coords[0][1] + 2, abs_coords[0][0] + 2), (255,255,0), 2)
-print(max_psr)
-
-cv2.imshow('image',img)
+#cv2.imshow('image',img)
+cv2.imshow('image', c_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 

@@ -59,10 +59,8 @@ def fit_ellipse(center_coords, gray, iris_max, iris_min):
 
         candidate_points.append(pt)
 
+    candidate_points = np.array(candidate_points)
     rand_pt = random.sample(candidate_points, 5)
-
-    candidate_points = np.unique(candidate_points, axis=0)
-    print(candidate_points)
 
     new_mat = []
    # return candidate_points

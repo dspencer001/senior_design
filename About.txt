@@ -1,0 +1,31 @@
+Project by: Samuel Jungert and David Spencer
+Completed on: 5/xx/2018
+
+Contained in this directory:
+eye jpgs --- Used to quickly test the functionality of our code
+
+./src/python
+test_eye.py --- The "main" driver of our program. Locates the iris center (center of the pupil)
+
+./src/python/track_ic
+corner_detection --- Used to track the eye corners ***Incomplete
+ellipse_fitting --- Used to track iris center and fit ellipse
+ransac.py --- Used to further refine ellipse around iris ***Incomplete 
+***More to come
+
+
+Goal of project:
+We are designing a gaze tracking system which will allow my nephew Caleb, who is special needs,
+the ability to control a computer. Other eye tracking technologies exist which allow Caleb to control 
+a computer, but they are difficult to setup and uncomfortable. Our eye tracking system will use a 
+camera to track eye movement. The setup of the eye tracking system will be as simple as pressing a button.
+The end goal of the system will be to create a simple means by which my nephew can enjoy the use of a computer.
+
+Functional Description (What does it do?):
+Using an IR sensitive Camera, Python, and OpenCV, we are tracking the head, eye region, iris center, eye corners,
+and more in order to calculate a gaze vector. This gaze vector will then be mapped to a desktop coordinate,
+which will enable the mouse to move to the users gaze vector.
+
+
+Research Article are design is based off of:
+https://arxiv.org/pdf/1605.05272.pdf

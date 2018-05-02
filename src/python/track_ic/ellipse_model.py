@@ -23,7 +23,6 @@ class EllipseModel:
     def fit(self, data):
         self.recent_data = data
 
-
         tp_data = np.transpose(data)
         tp_data = np.array([tp_data[1], tp_data[0]])
         lsqe = el.LSqEllipse()
@@ -64,8 +63,7 @@ class EllipseModel:
 
         error_func = lambda pt: self.pt_error(coefficients, center, pt)
 
-        pt_err = list(map(error_func, data))
-        print(pt_err)
+        pt_err = np.array(list(map(error_func, data)))
         return pt_err
 
         #for pt in data:

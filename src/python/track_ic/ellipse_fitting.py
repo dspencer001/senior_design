@@ -36,6 +36,7 @@ def get_candidate_points(center_coords, iris_max, iris_min, gx, gy):
                     gx[pt[0]][pt[1]] * gx[pt[0]][pt[1]] +
                     gy[pt[0]][pt[1]] * gy[pt[0]][pt[1]])
             g_hat = (gx[pt[0]][pt[1]]/ g_mag, gy[pt[0]][pt[1]]/ g_mag)
+
             if g_mag < g_mag_threshold:
                 continue
 
@@ -80,21 +81,10 @@ def fit_ellipse(center_coords, gray, iris_max, iris_min):
     ellipse_model = EllipseModel(gx, gy, gray)
     ransac_fit, ransac_data = ransac(
         candidate_points, ellipse_model,
-        5, 1000, 7e3, 300,
+        5, 50, 80, 10,
         return_all=True)
 
-
-
-    cp_transpose = np.transpose(rand_pt)
-
-    new_mat.append(cp_transpose[1])
-    new_mat.append(cp_transpose[0])
-
-    lsqe = el.LSqEllipse()
-    lsqe.fit(new_mat)
-
-    return lsqe.parameters()
-
+    return ransac_fit.parameters()
 
 
 

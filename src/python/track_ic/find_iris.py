@@ -15,7 +15,7 @@ import cv2
 def find_iris(img, gray):
     #print(gray)
 
-    iris_radius = len(img[1]) * 0.29 / 2
+    iris_radius = len(img[1]) * 0.33 / 2
 
     rad_min = iris_radius - iris_radius * 0.10
     rad_max = iris_radius + iris_radius * 0.10
@@ -54,7 +54,7 @@ def find_iris(img, gray):
 
 
     #lam = 0.3
-    lam= 0.20
+    lam= 0.3
     weighted_img = (1 - lam) * cv2.filter2D(255 - gray, cv2.CV_64F, wa)
     filtered_img = lam * cv2.filter2D(gray, cv2.CV_64F, crcc)
     co = filtered_img + weighted_img
@@ -64,7 +64,7 @@ def find_iris(img, gray):
     data_max = filters.maximum_filter(co, 11)
     data_min = filters.minimum_filter(co, 11)
     data_diff = (data_max - data_min)
-    threshold = 1500
+    threshold = 1200
     diff = (data_diff > threshold)
     maxima = (co == data_max)
     maxima[diff == 0] = 0
@@ -103,16 +103,27 @@ def find_iris(img, gray):
     row = max_psr_coords[0]
     col = max_psr_coords[1]
 
-    #center, width, height, phi = fit_ellipse((row, col), gray, rad_max, rad_min)
+    try:
+        center, width, height, phi = fit_ellipse((row, col), gray, rad_max, rad_min)
+    except ValueError:
+        return
+    center = np.round(center).astype(int)
+    width = int(width)
+    height = int(height)
+
     gx = cv2.Scharr(gray, cv2.CV_64F, 1, 0)
     gy = cv2.Scharr(gray, cv2.CV_64F, 0, 1)
 
-    candidate_points = get_candidate_points((row, col), rad_max, rad_min, gx, gy)
-    for pt in candidate_points:
-        cv2.rectangle(img, (pt[1],pt[0]), (pt[1] + 1, pt[0] + 1), (0,255,0), 1)
+    #candidate_points = get_candidate_points((row, col), rad_max, rad_min, gx, gy)
+    #for pt in candidate_points:
+    #    cv2.rectangle(img, (pt[1],pt[0]), (pt[1] + 1, pt[0] + 1), (0,255,0), 1)
 
 
-    #cv2.ellipse(img, (center[1], center[0]), (width / 2, height / 2), phi, (0, 360), 255, 2)
+    #print(center)
+    #print(width)
+    #print(height)
+
+    cv2.ellipse(img, (center[0], center[1]), (width, height), int(np.rad2deg(phi)), 0, 360, (0, 255, 0), 2)
     #pixel_center = np.round(center).astype(int)
     #width = round(width).astype(int)
     #height = round(height).astype(int)

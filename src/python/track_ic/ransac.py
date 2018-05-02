@@ -83,7 +83,13 @@ return bestfit
         maybeinliers = data[maybe_idxs,:]
         test_points = data[test_idxs]
         maybemodel = model.fit(maybeinliers)
+
+        #Skip if the angle is complex
+        if isinstance(maybemodel.phi, complex):
+            continue
+
         test_err = model.get_error( test_points, maybemodel)
+        #print(test_err)
         also_idxs = test_idxs[test_err < t] # select indices of rows with accepted points
         alsoinliers = data[also_idxs,:]
         if debug:

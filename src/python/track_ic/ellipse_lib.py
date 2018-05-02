@@ -105,6 +105,8 @@ class LSqEllipse:
         f = self.coef[4,0]/2.
         g = self.coef[5,0]
 
+        self.adjusted_coef = (a, b, c, d, f, g)
+
         #finding center of ellipse [eqn.19 and 20] from (**)
         x0 = (c*d-b*f)/(b**2.-a*c)
         y0 = (a*f-b*d)/(b**2.-a*c)
@@ -146,6 +148,9 @@ class LSqEllipse:
 
     def parameters(self):
         return self.center, self.width, self.height, self.phi
+
+    def coefficients(self):
+        return self.adjusted_coef
 
 
 def make_test_ellipse(center=[1,1], width=1, height=.6, phi=3.14/5):

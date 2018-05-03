@@ -81,7 +81,7 @@ def fit_ellipse(center_coords, gray, iris_max, iris_min):
     ellipse_model = EllipseModel(gx, gy, gray)
     ransac_fit, ransac_data = ransac(
         candidate_points, ellipse_model,
-        5, 50, 80, 10,
+        5, 30, 100, 20,
         return_all=True)
 
     return ransac_fit.parameters()

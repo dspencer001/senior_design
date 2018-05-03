@@ -29,13 +29,14 @@ def find_rois(frame):
     # Draw a rectangle around the faces
     for (x, y, w, h) in faces:
         cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
-        roi_gray = gray[y:y+h, x:x+w]
+        roi_gray = gray[y:y+int(h*0.6), x:x+w]
         roi_color = frame[y:y+h, x:x+w]
 
         eyes = eye_cascade.detectMultiScale(
             roi_gray,
             minNeighbors=5,
-            minSize=(10,10)
+            minSize=(10,10),
+            maxSize=(int(w/2), int(w/2))
         )
         for (ex,ey,ew,eh) in eyes:
             if(ew > w / 5):
@@ -50,7 +51,7 @@ def find_iris(img, gray, face_width):
     #print(gray)
 
     #iris_radius = len(img[1]) * 0.33 / 2
-    iris_radius = face_width / 26
+    iris_radius = face_width / 27
 
     rad_min = iris_radius - iris_radius * 0.1
     rad_max = iris_radius + iris_radius * 0.1
@@ -99,7 +100,7 @@ def find_iris(img, gray, face_width):
     data_max = filters.maximum_filter(co, 11)
     data_min = filters.minimum_filter(co, 11)
     data_diff = (data_max - data_min)
-    threshold = 500
+    threshold = 1000
     diff = (data_diff > threshold)
     maxima = (co == data_max)
     maxima[diff == 0] = 0

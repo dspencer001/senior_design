@@ -147,6 +147,9 @@ def find_iris(img, gray, face_width):
     except ValueError:
         print("No ellipse")
         return
+    except numpy.linalg.linalg.LinAlgError:
+        print("No ellipse")
+        return
 
     center = np.round(center).astype(int)
     width = int(width)
